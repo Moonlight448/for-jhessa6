@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Jhessa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=SF+Pro+Display:wght@300;500;600&family=Poppins:wght@300;500;700&family=Caveat:wght@600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Elegant Purple Glass Theme */
+            --bg-color-dark: #0A192F;
+            --accent-color: #c4a1ff;
+            --accent-glow: rgba(196, 161, 255, 0.6);
+            --overlay-bg: rgba(15, 20, 35, 0.35);
+            --text-color: #ffffff;
+            --card-bg: rgba(255, 255, 255, 0.1);
+            --card-border: rgba(255, 255, 255, 0.25);
+            --cloud-color: rgba(255, 255, 255, 0.25);
+            --bg-image: url('jennie-wallpaper.jpg');
+        }
+
+        /* Sleek Kamui Sky Blue & Midnight Theme */
+        body.theme-obito {
+            --bg-color-dark: #0f172a;
+            --accent-color: #38bdf8; 
+            --accent-glow: rgba(56, 189, 248, 0.6);
+            --overlay-bg: rgba(15, 23, 42, 0.4);
+            --card-bg: rgba(255, 255, 255, 0.08);
+            --card-border: rgba(255, 255, 255, 0.15);
+            --cloud-color: rgba(56, 189, 248, 0.2);
+            --bg-image: url('obito-wallpaper.jpg');
+        }
+
+        /* Hide default cursor on desktop */
+        @media (pointer: fine) { * { cursor: none !important; } }
+
+        body {
+            margin: 0; padding: 0;
+            font-family: 'Poppins', -apple-system, sans-serif;
+            color: var(--text-color);
+            background-color: var(--bg-color-dark);
+            background-image: var(--bg-image);
+            background-size: cover; background-position: center; background-attachment: fixed;
+            transition: background-image 1.2s ease-in-out, background-color 1.2s ease;
+            min-height: 100vh; overflow-x: hidden;
+        }
+
+        /* --- LIQUID GLASS PURPLE CURSOR --- */
+        .glass-cursor {
+            position: fixed; top: 0; left: 0; width: 24px; height: 24px;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(179, 136, 235, 0.7) 40%, rgba(74, 35, 90, 0.9));
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            box-shadow: 0 10px 20px var(--accent-glow), inset 0 0 10px rgba(255,255,255,0.8);
+            backdrop-filter: blur(4px); pointer-events: none; z-index: 999999;
+            transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s, border-radius 0.2s; mix-blend-mode: screen;
+            display: none; /* Hidden on mobile */
+        }
+        @media (pointer: fine) { .glass-cursor { display: block; } }
+        .glass-cursor.hovering { width: 45px; height: 45px; border-radius: 50%; background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.4), rgba(179, 136, 235, 0.4)); box-shadow: 0 0 30px var(--accent-color); }
+
+        /* --- VISIBLE CLOUDS & RAIN --- */
+        #clouds-container { position: fixed; top: -50px; left: 0; width: 100vw; height: 400px; pointer-events: none; z-index: 0; overflow: hidden; }
+        .cloud { position: absolute; background: var(--cloud-color); border-radius: 200px; filter: blur(12px); box-shadow: 0 0 40px var(--cloud-color), inset 0 0 20px rgba(255,255,255,0.3); animation: drift linear infinite; transition: all 1s ease; }
+        @keyframes drift { from { transform: translateX(110vw); } to { transform: translateX(-300px); } }
+
+        #rain-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 1; overflow: hidden; }
+        .rain-drop { position: absolute; top: -30px; opacity: 0.7; animation: fall linear infinite; text-shadow: 0 0 15px var(--accent-glow); }
+        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); opacity: 0; } }
+
+        .shower-heart { position: fixed; bottom: -50px; font-size: 2.5rem; z-index: 9999; pointer-events: none; filter: drop-shadow(0 0 15px var(--accent-glow)); animation: shootUp 2.5s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+        @keyframes shootUp { 0% { transform: translateY(0) scale(0.5) rotate(0deg); opacity: 1; } 100% { transform: translateY(-120vh) scale(1.8) rotate(360deg); opacity: 0; } }
+
+        /* --- MAIN LAYOUT --- */
+        .overlay { background: var(--overlay-bg); min-height: 100vh; padding: 4rem 2rem 150px 2rem; backdrop-filter: saturate(180%) blur(12px); -webkit-backdrop-filter: saturate(180%) blur(12px); position: relative; z-index: 2; transition: background 1s ease; }
+
+        /* --- WIDGETS --- */
+        .theme-toggle-btn { position: fixed; right: 20px; top: 20px; z-index: 1000; width: 50px; height: 50px; border-radius: 25px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); border: 1px solid var(--card-border); color: var(--text-color); font-size: 1.5rem; display: flex; align-items: center; justify-content: center; font-family: 'Times New Roman', serif; font-weight: bold; box-shadow: 0 8px 32px rgba(0,0,0,0.3); transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease; }
+        .theme-toggle-btn:hover { transform: scale(1.15) rotate(10deg); background: var(--accent-color); color: #000; box-shadow: 0 0 20px var(--accent-glow); }
+
+        .open-me-btn { position: fixed; left: 20px; top: 20px; z-index: 1000; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); border: 1px solid var(--card-border); border-radius: 25px; padding: 10px 20px; color: #fff; font-weight: 600; box-shadow: 0 8px 32px rgba(0,0,0,0.3); transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .open-me-btn:hover { transform: scale(1.1); background: var(--accent-color); color: #000; }
+
+        .radhey-widget { position: fixed; right: 20px; top: 90px; z-index: 1000; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(20px); border: 1px solid var(--card-border); border-radius: 25px; padding: 8px 15px; display: flex; align-items: center; gap: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); overflow: hidden; max-width: 50px; }
+        .radhey-widget .icon { font-size: 1.6rem; flex-shrink: 0; transition: transform 0.3s ease; }
+        .radhey-widget .details { opacity: 0; white-space: nowrap; transition: opacity 0.3s ease; display: none; text-align: left; }
+        .radhey-widget:hover { background: rgba(255,255,255,0.2); }
+        .radhey-widget.expanded { max-width: 300px; padding: 18px 25px; background: rgba(0,0,0,0.75); border-color: var(--accent-color); box-shadow: 0 10px 40px var(--accent-glow); }
+        .radhey-widget.expanded .icon { transform: rotate(15deg) scale(1.2); filter: drop-shadow(0 0 10px var(--accent-glow)); }
+        .radhey-widget.expanded .details { opacity: 1; display: block; animation: fadeIn 0.5s forwards; }
+        .radhey-text-title { color: #aaa; font-size: 0.85rem; display: block; text-transform: uppercase; letter-spacing: 1px; }
+        .radhey-text-value { color: #fff; font-size: 1.2rem; font-weight: 700; display: block; margin-bottom: 8px; text-shadow: 0 0 10px var(--accent-glow);}
+        .radhey-text-value.num { color: var(--accent-color); font-family: monospace; font-size: 1.3rem; }
+
+        /* --- GIANT HEART REVEAL --- */
+        #giant-heart-screen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.9); backdrop-filter: blur(25px); z-index: 10000; display: flex; align-items: center; justify-content: center; flex-direction: column; opacity: 0; pointer-events: none; transition: opacity 0.5s ease; }
+        #giant-heart-screen.active { opacity: 1; pointer-events: auto; }
+        .huge-heart { font-size: 8rem; filter: drop-shadow(0 0 30px var(--accent-glow)); transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); animation: pulseBig 1.5s infinite; }
+        @keyframes pulseBig { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        .huge-heart.crack { animation: explode 0.8s forwards; }
+        @keyframes explode { 0% { transform: scale(1.2); filter: brightness(2) drop-shadow(0 0 50px #fff); } 100% { transform: scale(3); opacity: 0; } }
+        .secret-message { position: absolute; text-align: center; font-size: 1.8rem; font-family: 'Dancing Script', cursive; color: #fff; text-shadow: 0 0 20px var(--accent-glow); opacity: 0; transform: scale(0.8); transition: all 1s ease; max-width: 90%; line-height: 1.4; padding: 20px; }
+        .secret-message.show { opacity: 1; transform: scale(1); }
+        .secret-message strong { color: var(--accent-color); font-family: 'Poppins', sans-serif; font-size: 1.2rem; display: block; margin-top: 15px; }
+
+        /* --- HEADER --- */
+        header { text-align: center; margin-bottom: 3rem; position: relative; }
+        .profile-container { position: relative; width: 180px; height: 180px; margin: 0 auto 1.5rem auto; border-radius: 50%; padding: 5px; z-index: 2; background: conic-gradient(from 0deg, var(--accent-color), transparent, var(--accent-color), transparent, var(--accent-color)); animation: spinBorder 6s linear infinite; box-shadow: 0 0 30px var(--accent-glow); transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease; }
+        .profile-container:hover { transform: scale(1.05); box-shadow: 0 0 50px var(--accent-glow); }
+        @keyframes spinBorder { 100% { transform: rotate(360deg); } }
+        .profile-inner { width: 100%; height: 100%; border-radius: 50%; overflow: hidden; border: 3px solid var(--bg-color-dark); animation: spinBorderReverse 6s linear infinite; position: relative; }
+        @keyframes spinBorderReverse { 100% { transform: rotate(-360deg); } }
+        .profile-pic { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.4s ease-in-out; }
+        .tap-hint { position: absolute; bottom: -30px; left: 50%; transform: translateX(-50%); font-size: 0.8rem; color: rgba(255,255,255,0.8); background: rgba(0,0,0,0.6); padding: 5px 12px; border-radius: 12px; backdrop-filter: blur(5px); opacity: 0; transition: opacity 0.3s ease; white-space: nowrap; font-weight: 500; }
+        .profile-container:hover .tap-hint { opacity: 1; }
+        h1.jhessa-name { font-family: 'Dancing Script', cursive; font-size: 5.5rem; font-weight: 700; color: #fff; text-shadow: 0 0 25px var(--accent-color); margin: 0; padding: 0; line-height: 1; transition: text-shadow 0.5s ease; }
+        .cute-msg { font-size: 1.3rem; color: #fff; margin-top: 10px; font-weight: 300; opacity: 0.9; text-shadow: 0 0 10px var(--accent-glow); letter-spacing: 2px; }
+
+        /* --- RESPONSIVE iOS CARDS --- */
+        .content-card { max-width: 900px; margin: 0 auto 3rem auto; background: var(--card-bg); padding: 3.5rem; border-radius: 35px; backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%); border: 1px solid var(--card-border); box-shadow: 0 15px 40px rgba(0,0,0,0.3); transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .content-card:hover { transform: translateY(-8px); border-color: rgba(255,255,255,0.4); box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
+        .section-title { color: #fff; font-size: 2.2rem; font-weight: 700; margin-top: 0; margin-bottom: 2.5rem; letter-spacing: 2px; text-align: center; text-shadow: 0 0 20px var(--accent-glow); }
+
+        /* --- JENNIE AI VOICE CARD --- */
+        .jennie-voice-card { border: 2px solid #ff99cc; box-shadow: 0 0 30px rgba(255, 153, 204, 0.4); animation: pulseNeonPink 4s infinite alternate; padding: 2rem; }
+        @keyframes pulseNeonPink { 0% { box-shadow: 0 0 20px rgba(255, 153, 204, 0.4); } 100% { box-shadow: 0 0 40px rgba(255, 153, 204, 0.8); } }
+        .jennie-player { display: flex; align-items: center; gap: 20px; background: rgba(0,0,0,0.5); padding: 25px; border-radius: 25px; border: 1px solid rgba(255, 153, 204, 0.5); backdrop-filter: blur(10px); }
+        .jennie-icon { width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, #ff99cc, var(--accent-color)); display: flex; align-items: center; justify-content: center; font-size: 2rem; box-shadow: 0 0 20px rgba(255, 153, 204, 0.6); transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); flex-shrink: 0; cursor: pointer; }
+        .jennie-icon:hover { transform: scale(1.15) rotate(5deg); }
+        .jennie-controls { flex-grow: 1; display: flex; flex-direction: column; gap: 12px; }
+        .jennie-title { font-weight: 600; color: #ffb3d9; text-shadow: 0 0 10px rgba(255,153,204,0.5); font-size: 1.2rem; letter-spacing: 1px;}
+        .jennie-progress-container { width: 100%; height: 10px; background: rgba(255, 255, 255, 0.2); border-radius: 5px; position: relative; cursor: pointer;}
+        .jennie-progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, #ff99cc, var(--accent-color)); border-radius: 5px; transition: width 0.1s linear; }
+
+        /* --- DYNAMIC SOCIAL LINKS EDITOR --- */
+        .socials-card { background-image: linear-gradient(135deg, rgba(0,0,0,0.5), rgba(0, 0, 0, 0.8)), url('jiraiya-wallpaper.jpg'); background-size: cover; background-position: center; position: relative; overflow: hidden; }
+        .social-links { display: flex; flex-direction: column; gap: 15px; max-width: 350px; margin: 0 auto; position: relative; z-index: 2; }
+        .social-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid var(--card-border); padding: 15px; border-radius: 20px; color: white; text-decoration: none; font-size: 1.1rem; font-weight: 600; text-align: center; letter-spacing: 1px; backdrop-filter: blur(10px); transition: all 0.4s ease; }
+        .social-btn:hover { background: var(--accent-color); color: #000; transform: scale(1.05); border-color: transparent; box-shadow: 0 0 25px var(--accent-glow); }
+        .edit-socials-btn { background: rgba(0,0,0,0.6); color: #fff; border: 1px solid var(--accent-color); padding: 8px 15px; border-radius: 15px; font-size: 0.9rem; margin: 20px auto 0 auto; display: block; transition: all 0.3s ease; position: relative; z-index: 2; cursor: pointer; }
+        .editor-container { background: rgba(0,0,0,0.8); border: 1px solid var(--accent-color); padding: 20px; border-radius: 20px; margin-top: 20px; display: none; position: relative; z-index: 2; }
+        .input-row { display: flex; gap: 10px; margin-bottom: 15px; align-items: center; }
+        .input-row input { flex: 1; padding: 10px; border-radius: 10px; border: none; background: rgba(255,255,255,0.9); outline: none; font-family: 'Poppins', sans-serif;}
+        .delete-btn { background: #ff4d4d; color: white; border: none; border-radius: 10px; padding: 10px 15px; font-weight: bold; cursor: pointer;}
+        .editor-actions { display: flex; justify-content: space-between; margin-top: 15px; }
+        .editor-actions button { padding: 10px 20px; border-radius: 15px; border: none; font-weight: bold; cursor: pointer; }
+        .save-btn { background: var(--accent-color); color: #000; }
+        .add-row-btn { background: rgba(255,255,255,0.2); color: #fff; }
+
+        /* --- GALLERIES & MEDIA --- */
+        .video-neon-frame { position: relative; width: 100%; border-radius: 25px; overflow: hidden; background: #000; border: 3px solid var(--accent-color); box-shadow: 0 0 30px var(--accent-glow); }
+        video { width: 100%; display: block; border-radius: 20px; outline: none; opacity: 0.95; transition: opacity 0.4s ease;}
+        .blob-gallery { display: flex; flex-wrap: wrap; gap: 35px; justify-content: center; align-items: center; padding: 20px 0; }
+        .blob-item { width: 200px; height: 200px; background: rgba(0,0,0,0.4); overflow: hidden; border: 3px solid var(--accent-color); box-shadow: 0 0 30px var(--accent-glow); transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); position: relative; border-radius: 40% 60% 60% 40% / 50% 40% 60% 50%; animation: morphBlob 8s ease-in-out infinite alternate; }
+        .blob-item:nth-child(even) { transform: translateY(30px); animation-delay: -4s; animation-direction: alternate-reverse; }
+        .blob-item:hover { transform: scale(1.15) translateY(0); z-index: 10; box-shadow: 0 0 50px var(--accent-color); border-radius: 20px; animation-play-state: paused; }
+        @keyframes morphBlob { 0% { border-radius: 40% 60% 60% 40% / 50% 40% 60% 50%; } 33% { border-radius: 60% 40% 50% 50% / 40% 60% 50% 60%; } 66% { border-radius: 50% 50% 40% 60% / 60% 40% 60% 40%; } 100% { border-radius: 40% 60% 50% 50% / 50% 50% 40% 60%; } }
+        .blob-image { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s ease; }
+        .blob-item:hover .blob-image { transform: scale(1.1); }
+        .painted-words { font-family: 'Caveat', cursive; font-size: 2.2rem; text-align: center; background: linear-gradient(45deg, #fff, var(--accent-color), #ffb6ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.4; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.5)); margin-bottom: 2rem; transform: rotate(-2deg); }
+        
+        .anime-marquee-wrapper { overflow: hidden; white-space: nowrap; width: 100%; position: relative; padding: 20px 0; border-top: 1px solid var(--card-border); border-bottom: 1px solid var(--card-border); background: rgba(0,0,0,0.2); border-radius: 20px;}
+        .anime-marquee-track { display: inline-flex; gap: 20px; animation: scrollLeft 20s linear infinite; }
+        .anime-marquee-track:hover { animation-play-state: paused; }
+        @keyframes scrollLeft { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        .anime-pic { width: 180px; height: 260px; object-fit: cover; border-radius: 15px; border: 2px solid var(--card-border); box-shadow: 0 5px 15px rgba(0,0,0,0.5); transition: all 0.4s ease; }
+        .anime-pic:hover { transform: scale(1.1) translateY(-10px); border-color: var(--accent-color); }
+
+        /* --- SLIDING MUSIC PLAYER --- */
+        .music-player-wrapper { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 1000; transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); width: 90vw; max-width: 450px;}
+        .music-player-wrapper.hidden { transform: translateX(calc(-50vw - 400px)); opacity: 0; pointer-events: none;}
+        .player-toggle-btn { position: fixed; bottom: 30px; left: 20px; z-index: 1001; width: 55px; height: 55px; border-radius: 50%; background: rgba(255,255,255,0.1); backdrop-filter: blur(15px); border: 1px solid var(--card-border); color: #fff; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 32px rgba(0,0,0,0.3); transition: all 0.4s ease; cursor: pointer;}
+        .player-toggle-btn:hover { transform: scale(1.1); background: var(--accent-color); color: #000; }
+        .music-player-container { background: rgba(15, 15, 15, 0.85); backdrop-filter: blur(25px) saturate(200%); border: 1px solid rgba(255,255,255,0.15); border-radius: 40px; padding: 12px 25px; display: flex; align-items: center; gap: 15px; box-shadow: 0 15px 40px rgba(0,0,0,0.5); width: 100%; position: relative; box-sizing: border-box;}
+        .music-cat { position: absolute; top: -45px; right: 30px; font-size: 2.5rem; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5)); transition: all 0.3s ease; z-index: 10; cursor: pointer; }
+        .music-cat:hover { transform: translateY(-10px) scale(1.1); }
+        .music-cat.sleeping { animation: breathe 3s infinite ease-in-out; }
+        .music-cat.dancing { animation: dance 0.6s infinite alternate; }
+        .vinyl-record { width: 50px; height: 50px; background: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; animation: spin 3s linear infinite; animation-play-state: paused; box-shadow: 0 0 10px rgba(0,0,0,0.8); position: relative; border: 1px solid #333; flex-shrink: 0; }
+        .vinyl-record.playing { animation-play-state: running; }
+        .album-cover { width: 24px; height: 24px; border-radius: 50%; background-size: cover; background-position: center; background-color: var(--accent-color); }
+        .vinyl-hole { width: 6px; height: 6px; background: #111; border-radius: 50%; position: absolute; border: 1px solid rgba(255,255,255,0.2); }
+        .player-info { flex-grow: 1; display: flex; flex-direction: column; gap: 6px; overflow: hidden; }
+        .song-title { font-size: 0.9rem; font-weight: 600; color: #fff; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+        .progress-container { width: 100%; height: 5px; background: rgba(255, 255, 255, 0.2); border-radius: 5px; position: relative; cursor: pointer;}
+        .progress-bar { height: 100%; width: 0%; background: var(--accent-color); border-radius: 5px; transition: width 0.1s linear; }
+        .player-buttons { display: flex; align-items: center; gap: 15px; }
+        .player-btn { background: none; border: none; color: white; font-size: 1.2rem; transition: all 0.3s ease; opacity: 0.8; cursor: pointer;}
+        .player-btn:hover { color: var(--accent-color); transform: scale(1.3); opacity: 1; }
+        .play-btn-large { font-size: 1.8rem; opacity: 1; }
+
+        /* =========================================
+           MOBILE RESPONSIVENESS (PHONES & TABLETS)
+           ========================================= */
+        @media (max-width: 768px) {
+            .overlay { padding: 5rem 1rem 120px 1rem; }
+            h1.jhessa-name { font-size: 3.5rem; }
+            .profile-container { width: 140px; height: 140px; }
+            .content-card { padding: 2rem 1.5rem; border-radius: 25px; }
+            .section-title { font-size: 1.6rem; }
+            
+            /* Adjust Top Widgets */
+            .open-me-btn { top: 15px; left: 15px; padding: 8px 15px; font-size: 0.9rem; }
+            .theme-toggle-btn { top: 15px; right: 15px; width: 45px; height: 45px; font-size: 1.2rem; }
+            
+            /* Radhey Widget adjustments */
+            .radhey-widget { top: 75px; right: 15px; }
+            .radhey-widget.expanded { max-width: 280px; padding: 12px 15px; }
+            .radhey-text-value { font-size: 1rem; }
+            .radhey-text-value.num { font-size: 1.1rem; }
+
+            /* Fix flex/grids for mobile */
+            .jennie-player { flex-direction: column; text-align: center; }
+            .blob-item { width: 160px; height: 160px; }
+            .blob-gallery { gap: 20px; }
+            .anime-pic { width: 140px; height: 200px; }
+            .painted-words { font-size: 1.8rem; }
+            
+            /* Fix Giant Heart */
+            .huge-heart { font-size: 6rem; }
+            .secret-message { font-size: 1.4rem; width: 90%; }
+            
+            /* Music Player adjustments */
+            .music-player-container { padding: 10px 15px; gap: 10px; }
+            .vinyl-record { width: 40px; height: 40px; }
+            .album-cover { width: 18px; height: 18px; }
+            .player-buttons { gap: 10px; }
+            .player-btn { font-size: 1rem; }
+            .play-btn-large { font-size: 1.5rem; }
+            .music-cat { font-size: 2rem; top: -35px; right: 20px; }
+            .player-toggle-btn { width: 45px; height: 45px; font-size: 1.2rem; bottom: 20px; left: 10px;}
+            .music-player-wrapper { bottom: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sound Effects Audio Elements -->
+    <audio id="sfx-open" src="sfx-open.mp3"></audio>
+    <audio id="sfx-pop" src="sfx-pop.mp3"></audio>
+    <audio id="sfx-meow" src="sfx-meow.mp3"></audio>
+    <!-- Background Music & Jennie Voice -->
+    <audio id="audio-player"></audio>
+    <audio id="jennie-audio"><source src="jennie-voice.mp3" type="audio/mpeg"></audio>
+
+    <div class="glass-cursor" id="custom-cursor"></div>
+    <div id="clouds-container"></div>
+    <div id="rain-container"></div>
+
+    <div class="theme-toggle-btn hoverable" onclick="toggleTheme()" title="Change Theme">I</div>
+    <div class="open-me-btn hoverable" onclick="showGiantHeart()">Open Me 💌</div>
+    
+    <div id="giant-heart-screen" onclick="breakHeart()">
+        <div class="huge-heart hoverable" id="huge-heart-icon">💖</div>
+        <div class="secret-message" id="secret-message">
+            To the girl who holds my whole universe...<br>
+            <strong>You are the most stunning, fiercely strong, and adorably cute person I know. You are my absolute best view.</strong>
+        </div>
+    </div>
+
+    <!-- Sleek Radhey Details Widget -->
+    <div class="radhey-widget hoverable" id="radhey-widget" onclick="toggleRadhey()">
+        <div class="icon">✨</div>
+        <div class="details">
+            <span class="radhey-text-title">Her Personal Bodyguard & Best Guy:</span>
+            <span class="radhey-text-value">Radhey</span>
+            <span class="radhey-text-title">Hotline (Call anytime):</span>
+            <span class="radhey-text-value num">9142514641</span>
+        </div>
+    </div>
+
+    <div class="overlay" id="main-overlay">
+        
+        <header>
+            <div class="profile-container hoverable" onclick="nextPfp()" title="Tap to change picture">
+                <div class="profile-inner">
+                    <img src="jhessa-main.jpg" id="main-pfp-img" class="profile-pic" alt="Jhessa">
+                </div>
+                <div class="tap-hint">Tap to change</div>
+            </div>
+            <h1 class="jhessa-name">For Jhessa</h1>
+            <p class="cute-msg">mwah mwah ~ Radhey</p>
+        </header>
+
+        <!-- JENNIE AI VOICE MESSAGE CARD -->
+        <div class="content-card jennie-voice-card hoverable">
+            <h2 class="section-title" style="color: #ff99cc; text-shadow: 0 0 15px rgba(255,153,204,0.6);">A Special Message 🎀</h2>
+            <div class="jennie-player">
+                <div class="jennie-icon hoverable" id="jennie-play-btn" onclick="toggleJennieVoice()">▶️</div>
+                <div class="jennie-controls">
+                    <div class="jennie-title">From Jennie... 🤫</div>
+                    <div class="jennie-progress-container hoverable" id="jennie-progress-container" onclick="seekJennie(event)">
+                        <div class="jennie-progress-bar" id="jennie-progress-bar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DYNAMIC SOCIALS SECTION -->
+        <div class="content-card socials-card">
+            <h2 class="section-title">My Starry Universe 🌌</h2>
+            <div id="social-links-display" class="social-links"></div>
+            <button onclick="toggleEditor()" class="edit-socials-btn hoverable">✏️ Edit My Links</button>
+
+            <div id="social-links-editor" class="editor-container">
+                <p style="color:var(--accent-color); margin-top:0; font-size:0.9rem;">Change your links here. They will be saved to your browser forever!</p>
+                <div id="inputs-container"></div>
+                <div class="editor-actions">
+                    <button class="add-row-btn hoverable" onclick="addInputRow()">+ Add Link</button>
+                    <button class="save-btn hoverable" onclick="saveSocials()">💾 Save</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h2 class="section-title">Worlds We Escape To 🎌</h2>
+            <div class="anime-marquee-wrapper">
+                <div class="anime-marquee-track">
+                    <img src="anime-bungo.jpg" class="anime-pic hoverable" alt="Bungo Stray Dogs">
+                    <img src="anime-moriarty.jpg" class="anime-pic hoverable" alt="Moriarty">
+                    <img src="anime-naruto.jpg" class="anime-pic hoverable" alt="Naruto">
+                    <img src="anime-bungo.jpg" class="anime-pic hoverable" alt="Bungo Stray Dogs">
+                    <img src="anime-moriarty.jpg" class="anime-pic hoverable" alt="Moriarty">
+                    <img src="anime-naruto.jpg" class="anime-pic hoverable" alt="Naruto">
+                </div>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h2 class="section-title">A Hero's Echo ⚔️</h2>
+            <div class="video-neon-frame hoverable">
+                <video id="obito-vid" controls>
+                    <source src="obito-video.mp4" type="video/mp4">
+                </video>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h2 class="section-title">Our Masterpieces 🎨</h2>
+            <div class="painted-words">
+                "Like the haunting melodies of Cigarettes After Sex, and the rare midnight bloom of the Cereus... your presence is a beautiful masterpiece that only the luckiest get to witness."
+            </div>
+            <div class="blob-gallery">
+                <div class="blob-item hoverable"><img src="cas-spotify.jpg" class="blob-image"></div>
+                <div class="blob-item hoverable"><img src="flower1.jpg" class="blob-image"></div>
+                <div class="blob-item hoverable"><img src="cas-band.jpg" class="blob-image"></div>
+                <div class="blob-item hoverable"><img src="flower2.jpg" class="blob-image"></div>
+                <div class="blob-item hoverable"><img src="cas-collage.jpg" class="blob-image"></div>
+                <div class="blob-item hoverable"><img src="flower3.jpg" class="blob-image"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="player-toggle-btn hoverable" id="player-toggle-btn" onclick="toggleMusicPlayer()">🎵</div>
+
+    <!-- Background Music Player & Cat -->
+    <div class="music-player-wrapper" id="music-player-wrapper">
+        <div class="music-player-container">
+            <div class="music-cat sleeping hoverable" id="music-cat" onclick="petCat()" title="Pet me!">💤😺</div>
+            <div class="vinyl-record" id="vinyl"><div class="album-cover" id="album-cover"></div><div class="vinyl-hole"></div></div>
+            <div class="player-info">
+                <div class="song-title" id="song-title">Loading...</div>
+                <div class="progress-container hoverable" id="progress-container"><div class="progress-bar" id="progress-bar"></div></div>
+            </div>
+            <div class="player-buttons">
+                <button class="player-btn hoverable" id="prev-btn">⏮</button>
+                <button class="player-btn play-btn-large hoverable" id="play-btn">▶</button>
+                <button class="player-btn hoverable" id="next-btn">⏭</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- SOUND EFFECTS ---
+        const sfxOpen = document.getElementById('sfx-open');
+        const sfxPop = document.getElementById('sfx-pop');
+        const sfxMeow = document.getElementById('sfx-meow');
+
+        function playSfx(audioEl) {
+            audioEl.currentTime = 0;
+            audioEl.play().catch(e => console.log("Audio play prevented until user interaction."));
+        }
+
+        // --- CUSTOM CURSOR ---
+        const cursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', (e) => {
+            requestAnimationFrame(() => { cursor.style.transform = `translate(calc(${e.clientX}px - 50%), calc(${e.clientY}px - 50%))`; });
+        });
+        const hoverables = document.querySelectorAll('.hoverable, a, button, video');
+        hoverables.forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hovering'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hovering'));
+        });
+
+        // --- DYNAMIC SOCIAL LINKS ---
+        let userSocials = JSON.parse(localStorage.getItem('jhessa_socials')) || [
+            { name: "🎵 My Spotify", url: "https://spotify.com" }, { name: "📸 My Instagram", url: "https://instagram.com" }
+        ];
+        function renderSocialsDisplay() {
+            const container = document.getElementById('social-links-display'); container.innerHTML = '';
+            userSocials.forEach(link => {
+                const a = document.createElement('a'); a.className = 'social-btn hoverable'; a.target = '_blank'; a.innerText = link.name;
+                a.href = link.url.startsWith('http') ? link.url : 'https://' + link.url;
+                a.addEventListener('mouseenter', () => cursor.classList.add('hovering'));
+                a.addEventListener('mouseleave', () => cursor.classList.remove('hovering'));
+                container.appendChild(a);
+            });
+        }
+        function toggleEditor() {
+            playSfx(sfxPop);
+            const editor = document.getElementById('social-links-editor');
+            if (editor.style.display === 'block') { editor.style.display = 'none'; } else {
+                editor.style.display = 'block'; const container = document.getElementById('inputs-container'); container.innerHTML = '';
+                userSocials.forEach(link => addInputRow(link.name, link.url));
+                if(userSocials.length === 0) addInputRow(); 
+            }
+        }
+        function addInputRow(name = '', url = '') {
+            const container = document.getElementById('inputs-container'); const div = document.createElement('div'); div.className = 'input-row';
+            div.innerHTML = `<input type="text" class="link-name" placeholder="Title (e.g. 🎵 Spotify)" value="${name}"><input type="text" class="link-url" placeholder="Link (e.g. spotify.com/user...)" value="${url}"><button class="delete-btn hoverable" onclick="this.parentElement.remove()">🗑️</button>`;
+            container.appendChild(div);
+        }
+        function saveSocials() {
+            playSfx(sfxPop);
+            const rows = document.querySelectorAll('.input-row'); userSocials = [];
+            rows.forEach(row => { const name = row.querySelector('.link-name').value.trim(); const url = row.querySelector('.link-url').value.trim(); if (name && url) userSocials.push({ name, url }); });
+            localStorage.setItem('jhessa_socials', JSON.stringify(userSocials));
+            renderSocialsDisplay(); document.getElementById('social-links-editor').style.display = 'none';
+        }
+        renderSocialsDisplay();
+
+        // --- PFP CHANGER ---
+        const pfpImages = ['jhessa-main.jpg', 'jhessa-2.jpg', 'jhessa-3.jpg', 'jhessa-4.jpg', 'jhessa-5.jpg']; let pfpIndex = 0;
+        function nextPfp() {
+            playSfx(sfxPop);
+            const imgElement = document.getElementById('main-pfp-img'); imgElement.style.opacity = 0; 
+            setTimeout(() => { pfpIndex = (pfpIndex + 1) % pfpImages.length; imgElement.src = pfpImages[pfpIndex]; imgElement.style.opacity = 1; }, 300);
+        }
+
+        // --- THEME SWITCHER ---
+        let isObito = false;
+        function toggleTheme() {
+            playSfx(sfxPop);
+            isObito = !isObito; 
+            if (isObito) document.body.classList.add('theme-obito'); else document.body.classList.remove('theme-obito'); 
+        }
+
+        // --- GIANT HEART REVEAL ---
+        const heartScreen = document.getElementById('giant-heart-screen'); const hugeHeart = document.getElementById('huge-heart-icon'); const secretMsg = document.getElementById('secret-message'); let heartBroken = false;
+        function showGiantHeart() { 
+            playSfx(sfxPop);
+            heartScreen.classList.add('active'); hugeHeart.classList.remove('crack'); secretMsg.classList.remove('show'); heartBroken = false; 
+        }
+        function breakHeart() { 
+            if(heartBroken) return; heartBroken = true; 
+            playSfx(sfxOpen); // Magic Bell sound!
+            hugeHeart.classList.add('crack'); setTimeout(() => { secretMsg.classList.add('show'); }, 500); setTimeout(() => { heartScreen.classList.remove('active'); }, 7000); 
+        }
+
+        // --- RADHEY WIDGET & HEART SHOWER ---
+        function toggleRadhey() { 
+            playSfx(sfxPop);
+            const widget = document.getElementById('radhey-widget'); widget.classList.toggle('expanded'); if(widget.classList.contains('expanded')) showerHearts(); 
+        }
+        function showerHearts() {
+            const symbols = isObito ? ['💙','✨','🌙','❄️'] : ['💖','💜','✨','🤍'];
+            for(let i=0; i<35; i++) { setTimeout(() => { const h = document.createElement('div'); h.className = 'shower-heart'; h.innerText = symbols[Math.floor(Math.random()*4)]; h.style.left = Math.random() * 100 + 'vw'; h.style.animationDuration = (Math.random() * 1.5 + 2) + 's'; document.body.appendChild(h); setTimeout(() => h.remove(), 4000); }, i * 60); }
+        }
+
+        // --- CLOUDS AND RAIN ---
+        const rainContainer = document.getElementById('rain-container'); const cloudsContainer = document.getElementById('clouds-container');
+        function getEmojis() { return isObito ? ['❄️️', '🌙', '✨', '💙', '☁️'] : ['💜', '🌙', '✨', '🤍', '🌸']; }
+        function createRainDrop() { const drop = document.createElement('div'); const emojis = getEmojis(); drop.innerText = emojis[Math.floor(Math.random() * emojis.length)]; drop.className = 'rain-drop'; drop.style.left = Math.random() * 100 + 'vw'; drop.style.animationDuration = (Math.random() * 5 + 6) + 's'; drop.style.fontSize = (Math.random() * 1 + 0.8) + 'rem'; rainContainer.appendChild(drop); setTimeout(() => { drop.remove(); }, 10000); } setInterval(createRainDrop, 350);
+        function createCloud() { const cloud = document.createElement('div'); cloud.className = 'cloud'; cloud.style.width = (Math.random() * 300 + 200) + 'px'; cloud.style.height = (Math.random() * 100 + 80) + 'px'; cloud.style.top = (Math.random() * 180 - 20) + 'px'; cloud.style.animationDuration = (Math.random() * 20 + 25) + 's'; cloudsContainer.appendChild(cloud); setTimeout(() => { cloud.remove(); }, 45000); } for(let i=0; i<6; i++) createCloud(); setInterval(createCloud, 5000);
+
+        // --- AI JENNIE VOICE MESSAGE LOGIC ---
+        const jennieAudio = document.getElementById('jennie-audio'); const jenniePlayBtn = document.getElementById('jennie-play-btn'); const jennieProgressBar = document.getElementById('jennie-progress-bar'); const jennieProgressContainer = document.getElementById('jennie-progress-container');
+        function toggleJennieVoice() {
+            if (jennieAudio.paused) {
+                if (!audio.paused) pauseSong(); if (!obitoVid.paused) obitoVid.pause();
+                jennieAudio.play(); jenniePlayBtn.innerHTML = '⏸️'; jenniePlayBtn.style.animation = 'pulseBig 1s infinite';
+            } else { jennieAudio.pause(); jenniePlayBtn.innerHTML = '▶️'; jenniePlayBtn.style.animation = 'none'; }
+        }
+        jennieAudio.addEventListener('timeupdate', () => { if (jennieAudio.duration) jennieProgressBar.style.width = `${(jennieAudio.currentTime / jennieAudio.duration) * 100}%`; });
+        function seekJennie(e) { playSfx(sfxPop); const width = jennieProgressContainer.clientWidth; if (jennieAudio.duration) jennieAudio.currentTime = (e.offsetX / width) * jennieAudio.duration; }
+        jennieAudio.addEventListener('ended', () => { jenniePlayBtn.innerHTML = '▶'; jenniePlayBtn.style.animation = 'none'; });
+
+        // --- VIDEO PLAYER ---
+        const obitoVid = document.getElementById('obito-vid'); 
+        obitoVid.addEventListener('play', () => { if (!audio.paused) pauseSong(); if (!jennieAudio.paused) toggleJennieVoice(); });
+
+        // --- SLIDING MUSIC PLAYER & CAT ---
+        const playerWrapper = document.getElementById('music-player-wrapper'); const playerToggleBtn = document.getElementById('player-toggle-btn'); let playerVisible = true;
+        function toggleMusicPlayer() { 
+            playSfx(sfxPop);
+            playerVisible = !playerVisible; if (playerVisible) { playerWrapper.classList.remove('hidden'); playerToggleBtn.innerHTML = '⬅️'; } else { playerWrapper.classList.add('hidden'); playerToggleBtn.innerHTML = '🎶'; } 
+        }
+
+        const audio = document.getElementById('audio-player'); const playBtn = document.getElementById('play-btn'); const prevBtn = document.getElementById('prev-btn'); const nextBtn = document.getElementById('next-btn'); const title = document.getElementById('song-title'); const progressContainer = document.getElementById('progress-container'); const progressBar = document.getElementById('progress-bar'); const vinyl = document.getElementById('vinyl'); const albumCover = document.getElementById('album-cover'); const cat = document.getElementById('music-cat');
+        const songs = [{ name: "Chase Atlantic", file: "chase-atlantic.mp3", cover: "chase-cover.jpg" }, { name: "Cigarettes After Sex", file: "dont-let-me-go.mp3", cover: "cas-cover.jpg" }]; let songIndex = 0;
+
+        function loadSong(song) { title.innerText = song.name; audio.src = song.file; albumCover.style.backgroundImage = `url('${song.cover}')`; }
+        function playSong() { audio.play(); playBtn.innerText = '⏸'; vinyl.classList.add('playing'); cat.className = 'music-cat dancing hoverable'; cat.innerText = '😸🎵'; }
+        function pauseSong() { audio.pause(); playBtn.innerText = '▶'; vinyl.classList.remove('playing'); cat.className = 'music-cat sleeping hoverable'; cat.innerText = '💤😺'; }
+        function petCat() { 
+            playSfx(sfxMeow);
+            if(audio.paused) { cat.innerText = '😻'; setTimeout(()=> cat.innerText='💤😺', 1000); } else { cat.innerText = '😽🎶'; setTimeout(()=> cat.innerText='😸🎵', 1000); } showerHearts(); 
+        }
+
+        playBtn.addEventListener('click', () => { if (audio.paused) { if (!obitoVid.paused) obitoVid.pause(); if (!jennieAudio.paused) toggleJennieVoice(); playSong(); } else pauseSong(); });
+        function prevSong() { playSfx(sfxPop); songIndex = (songIndex - 1 + songs.length) % songs.length; loadSong(songs[songIndex]); playSong(); } function nextSong() { playSfx(sfxPop); songIndex = (songIndex + 1) % songs.length; loadSong(songs[songIndex]); playSong(); } prevBtn.addEventListener('click', prevSong); nextBtn.addEventListener('click', nextSong);
+
+        audio.addEventListener('timeupdate', (e) => { const { duration, currentTime } = e.srcElement; if (duration) progressBar.style.width = `${(currentTime / duration) * 100}%`; });
+        progressContainer.addEventListener('click', (e) => { playSfx(sfxPop); const width = progressContainer.clientWidth; if (audio.duration) audio.currentTime = (e.offsetX / width) * audio.duration; });
+        audio.addEventListener('ended', nextSong);
+
+        loadSong(songs[songIndex]); playerToggleBtn.innerHTML = '⬅️';
+    </script>
+</body>
+</html>
